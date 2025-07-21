@@ -14,7 +14,7 @@ let activeSuggestionIndex = -1;
 function updateSuggestions() {
   const input = categoryInput.value.trim().toLowerCase();
   suggestionBox.innerHTML = "";
-  activeSuggestionIndex = -1; // reset selection
+  activeSuggestionIndex = -1;
 
   const matches = categories.filter((cat) => cat.toLowerCase().includes(input));
 
@@ -22,7 +22,7 @@ function updateSuggestions() {
     matches.forEach((cat) => {
       const li = document.createElement("li");
       li.textContent = cat;
-      li.classList.add("suggestion-item"); // ✅ add class
+      li.classList.add("suggestion-item");
       li.onclick = () => {
         categoryInput.value = cat;
         suggestionBox.classList.add("hidden");
@@ -33,7 +33,7 @@ function updateSuggestions() {
     const li = document.createElement("li");
     li.textContent = `+ Add "${categoryInput.value}"`;
     li.style.fontStyle = "italic";
-    li.classList.add("suggestion-item"); // ✅ add class
+    li.classList.add("suggestion-item");
     li.onclick = () => {
       const newCategory = categoryInput.value.trim();
       if (!categories.includes(newCategory)) {
@@ -101,7 +101,7 @@ function validInput() {
     if (item.element.value.trim() === "") {
       item.element.classList.add("invalid");
       item.error.textContent = item.errorMsg;
-      item.error.style.display = "block"; // or any styling you use
+      item.error.style.display = "block";
       isValid = false;
     } else {
       item.error.textContent = "";
