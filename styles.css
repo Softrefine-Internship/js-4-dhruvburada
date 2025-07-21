@@ -409,3 +409,11 @@ body.dark #advanced-filters {
 body.dark .filter-item label {
     color: white;
 }
+
+@media (max-width: 580px) {
+
+    .range-group,
+    .date-group {
+        flex-direction: column;
+    }
+}
