@@ -8,10 +8,22 @@ let categories = JSON.parse(localStorage.getItem("categories")) || [
   "Enjoy",
   "Utilities",
 ];
-let total = 0;
 let tbody = document.getElementById("expense-table-body");
+const searchInput = document.getElementById("search-input");
+const minAmountInput = document.getElementById("min-amount");
+const maxAmountInput = document.getElementById("max-amount");
+const startDateInput = document.getElementById("start-date");
+const endDateInput = document.getElementById("end-date");
+
+const applyFiltersBtn = document.getElementById("apply-filters");
+const clearFiltersBtn = document.getElementById("clear-filters");
+const toggleFiltersBtn = document.getElementById("toggle-filters");
+
+const filtersPanel = document.getElementById("advanced-filters");
+
 let activeSuggestionIndex = -1;
 let updateIndex = -1;
+let total = 0;
 
 function updateSuggestions() {
   const input = categoryInput.value.trim().toLowerCase();
@@ -139,8 +151,14 @@ function validInput() {
   return isValid;
 }
 
-function showTableData() {
-  let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
+function showTableData(event, filteredExpenses) {
+  let expenses = null;
+  if (filteredExpenses == null) {
+    expenses = JSON.parse(localStorage.getItem("expenses")) || [];
+  } else {
+    expenses = filteredExpenses;
+    console.log(expenses);
+  }
 
   let totalElem = document.getElementById("total-amount");
   tbody.innerHTML = "";
@@ -233,4 +251,69 @@ categoryInput.addEventListener("keydown", function (e) {
       suggestions[activeSuggestionIndex].click();
     }
   }
+});
+
+function search(event) {
+  let expenses = localStorage.getItem("expenses") || "[]";
+  expenses = JSON.parse(expenses);
+  let searchValue = document.getElementById("search-input").value;
+  let filteredExpenses = expenses.filter(
+    (expense) =>
+      expense.category.toLowerCase().includes(searchValue.toLowerCase()) ||
+      expense.name.toLowerCase().includes(searchValue.toLowerCase())
+  );
+  console.log(filteredExpenses);
+  showTableData(event, filteredExpenses);
+}
+
+function filterExpenses() {
+  const searchTerm = searchInput.value.trim().toLowerCase();
+  const minAmount = parseFloat(minAmountInput.value) || 0;
+  const maxAmount = parseFloat(maxAmountInput.value) || Infinity;
+  const startDate = new Date(startDateInput.value);
+  const endDate = new Date(endDateInput.value);
+
+  const expenses = JSON.parse(localStorage.getItem("expenses")) || [];
+
+  const filtered = expenses.filter((exp) => {
+    const nameMatch = exp.name.toLowerCase().includes(searchTerm);
+    const categoryMatch = exp.category.toLowerCase().includes(searchTerm);
+
+    const amount = parseFloat(exp.amount);
+    const amountMatch = amount >= minAmount && amount <= maxAmount;
+
+    const expenseDate = new Date(exp.date);
+    const dateMatch =
+      (!startDateInput.value || expenseDate >= startDate) &&
+      (!endDateInput.value || expenseDate <= endDate);
+
+    return (nameMatch || categoryMatch) && amountMatch && dateMatch;
+  });
+
+  showTableData(undefined, filtered); // Update your table with filtered data
+}
+
+const toggleBtn = document.getElementById("toggle-filters");
+const advancedFilters = document.getElementById("advanced-filters");
+
+toggleBtn.addEventListener("click", () => {
+  advancedFilters.classList.toggle("hidden");
+  toggleBtn.classList.toggle("active");
+
+  toggleBtn.innerText = advancedFilters.classList.contains("hidden")
+    ? "More Filters"
+    : "Less Filters";
+});
+
+searchInput.addEventListener("input", search);
+
+applyFiltersBtn.addEventListener("click", filterExpenses);
+
+clearFiltersBtn.addEventListener("click", () => {
+  searchInput.value = "";
+  minAmountInput.value = "";
+  maxAmountInput.value = "";
+  startDateInput.value = "";
+  endDateInput.value = "";
+  showTableData();
 });

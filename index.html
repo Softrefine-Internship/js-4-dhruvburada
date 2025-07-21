@@ -50,6 +50,51 @@
       </form>
 
       <div class="total">Total: ₹<span id="total-amount">0</span></div>
+      <!-- Filter Panel -->
+      <div class="filter-bar">
+        <input
+          type="text"
+          id="search-input"
+          placeholder="Search by name or category..."
+        />
+
+        <button id="toggle-filters" class="outline-btn">More Filters</button>
+      </div>
+
+      <div id="advanced-filters" class="hidden">
+        <div class="filter-row">
+          <div class="filter-item">
+            <label>Amount Range</label>
+            <div class="range-group">
+              <input
+                type="number"
+                id="min-amount"
+                placeholder="Min ₹"
+                min="1"
+              />
+              <input
+                type="number"
+                id="max-amount"
+                placeholder="Max ₹"
+                min="1"
+              />
+            </div>
+          </div>
+
+          <div class="filter-item">
+            <label>Date Range</label>
+            <div class="date-group">
+              <input type="date" id="start-date" />
+              <input type="date" id="end-date" />
+            </div>
+          </div>
+
+          <div class="filter-item actions">
+            <button id="apply-filters" class="primary-btn">Apply</button>
+            <button id="clear-filters" class="outline-btn">Clear</button>
+          </div>
+        </div>
+      </div>
 
       <div class="table-wrapper">
         <table>
