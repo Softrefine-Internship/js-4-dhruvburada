@@ -24,6 +24,7 @@ const filtersPanel = document.getElementById("advanced-filters");
 let activeSuggestionIndex = -1;
 let updateIndex = -1;
 let total = 0;
+let currentFilteredExpenses = null;
 
 function updateSuggestions() {
   const input = categoryInput.value.trim().toLowerCase();
@@ -140,7 +141,7 @@ function validInput() {
     if (item.element.value.trim() === "") {
       item.element.classList.add("invalid");
       item.error.textContent = item.errorMsg;
-      item.error.style.display = "block";
+
       isValid = false;
     } else {
       item.error.textContent = "";
@@ -253,15 +254,17 @@ categoryInput.addEventListener("keydown", function (e) {
 });
 
 function search(event) {
-  let expenses = localStorage.getItem("expenses") || "[]";
-  expenses = JSON.parse(expenses);
-  let searchValue = document.getElementById("search-input").value;
-  let filteredExpenses = expenses.filter(
+  const allExpenses =
+    currentFilteredExpenses ??
+    (JSON.parse(localStorage.getItem("expenses")) || []);
+  const searchValue = searchInput.value.trim().toLowerCase();
+
+  const filteredExpenses = allExpenses.filter(
     (expense) =>
-      expense.category.toLowerCase().includes(searchValue.toLowerCase()) ||
-      expense.name.toLowerCase().includes(searchValue.toLowerCase())
+      expense.name.toLowerCase().includes(searchValue) ||
+      expense.category.toLowerCase().includes(searchValue)
   );
-  console.log(filteredExpenses);
+
   showTableData(event, filteredExpenses);
 }
 
@@ -289,7 +292,8 @@ function filterExpenses() {
     return (nameMatch || categoryMatch) && amountMatch && dateMatch;
   });
 
-  showTableData(undefined, filtered); // Update your table with filtered data
+  currentFilteredExpenses = filtered; // ✅ Store filtered data
+  showTableData(undefined, filtered);
 }
 
 const toggleBtn = document.getElementById("toggle-filters");
@@ -314,6 +318,7 @@ clearFiltersBtn.addEventListener("click", () => {
   maxAmountInput.value = "";
   startDateInput.value = "";
   endDateInput.value = "";
+  currentFilteredExpenses = null;
   showTableData();
 });
 
