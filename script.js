@@ -11,6 +11,8 @@ let categories = JSON.parse(localStorage.getItem("categories")) || [
 let total = 0;
 let tbody = document.getElementById("expense-table-body");
 let activeSuggestionIndex = -1;
+let updateIndex = -1;
+
 function updateSuggestions() {
   const input = categoryInput.value.trim().toLowerCase();
   suggestionBox.innerHTML = "";
@@ -65,10 +67,35 @@ function addExpense(event) {
       category: expenseCategory.value,
       date: expenseDate.value,
     };
-    expense.push(newExpense);
-    localStorage.setItem("expenses", JSON.stringify(expense));
+
+    if (updateIndex !== -1) {
+      submitButton.innerText = "Update Expense";
+      expense[updateIndex] = newExpense;
+      localStorage.setItem("expenses", JSON.stringify(expense));
+      updateIndex = -1;
+      submitButton.innerText = "Add Expense";
+    } else {
+      expense.push(newExpense);
+      localStorage.setItem("expenses", JSON.stringify(expense));
+    }
+
     showTableData();
+    resetForm();
   }
+}
+
+function resetForm() {
+  document.getElementById("expense-name").value = "";
+  document.getElementById("expense-amount").value = "";
+  document.getElementById("category-input").value = "";
+  document.getElementById("expense-date").value = "";
+}
+
+function populateForm(name, amount, category, date) {
+  document.getElementById("expense-name").value = `${name}`;
+  document.getElementById("expense-amount").value = amount;
+  document.getElementById("category-input").value = `${category}`;
+  document.getElementById("expense-date").value = `${date}`;
 }
 
 function validInput() {
@@ -113,12 +140,12 @@ function validInput() {
 }
 
 function showTableData() {
-  let expenses = JSON.parse(localStorage.getItem("expenses"));
+  let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
 
   let totalElem = document.getElementById("total-amount");
   tbody.innerHTML = "";
   total = 0;
-  if (expenses) {
+  if (expenses.length !== 0) {
     expenses.forEach((expense, index) => {
       let row = document.createElement("tr");
       row.innerHTML = `
@@ -126,17 +153,28 @@ function showTableData() {
       <td>${expense.amount}</td>
       <td>${expense.date}</td>
       <td>${expense.category}</td>
-      <td><button class="delete-btn" data-id="${index}">Delete</button>
+      <td><button class="delete-btn" data-id="${index}">Delete </button>
+      <button class="update-btn" data-id="${index}">Update</button>
+
       `;
       tbody.append(row);
       total += parseFloat(expense.amount);
     });
 
     totalElem.innerHTML = total;
+  } else {
+    let row = document.createElement("tr");
+    let td = document.createElement("td");
+    td.setAttribute("colspan", "5"); // adjust this based on your column count
+    td.textContent = "No Data Found";
+    td.style.textAlign = "center";
+    td.style.fontStyle = "italic";
+    row.appendChild(td);
+    tbody.appendChild(row);
   }
 }
 
-function deleteExpense(event) {
+function expenseActions(event) {
   if (event.target.classList.contains("delete-btn")) {
     const id = parseInt(event.target.getAttribute("data-id"));
     let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
@@ -144,6 +182,21 @@ function deleteExpense(event) {
     localStorage.setItem("expenses", JSON.stringify(expenses));
     showTableData();
   }
+  if (event.target.classList.contains("update-btn")) {
+    resetForm();
+    const id = parseInt(event.target.getAttribute("data-id"));
+    let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
+    let expense = expenses[id];
+    populateForm(expense.name, expense.amount, expense.category, expense.date);
+    submitButton.innerText = "Update Expense";
+    updateIndex = id;
+  }
+}
+
+function updateActiveSuggestion(suggestions) {
+  suggestions.forEach((li, index) => {
+    li.classList.toggle("active", index === activeSuggestionIndex);
+  });
 }
 
 categoryInput.addEventListener("input", updateSuggestions);
@@ -155,7 +208,8 @@ document.addEventListener("click", (e) => {
 
 document.addEventListener("DOMContentLoaded", showTableData);
 
-tbody.addEventListener("click", deleteExpense);
+tbody.addEventListener("click", expenseActions);
+
 submitButton.addEventListener("click", addExpense);
 
 categoryInput.addEventListener("keydown", function (e) {
@@ -180,9 +234,3 @@ categoryInput.addEventListener("keydown", function (e) {
     }
   }
 });
-
-function updateActiveSuggestion(suggestions) {
-  suggestions.forEach((li, index) => {
-    li.classList.toggle("active", index === activeSuggestionIndex);
-  });
-}
