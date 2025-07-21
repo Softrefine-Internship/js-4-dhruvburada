@@ -178,8 +178,6 @@ function showTableData(event, filteredExpenses) {
       tbody.append(row);
       total += parseFloat(expense.amount);
     });
-
-    totalElem.innerHTML = total;
   } else {
     let row = document.createElement("tr");
     let td = document.createElement("td");
@@ -190,6 +188,7 @@ function showTableData(event, filteredExpenses) {
     row.appendChild(td);
     tbody.appendChild(row);
   }
+  totalElem.innerHTML = total;
 }
 
 function expenseActions(event) {
@@ -316,4 +315,28 @@ clearFiltersBtn.addEventListener("click", () => {
   startDateInput.value = "";
   endDateInput.value = "";
   showTableData();
+});
+
+//dark mode
+
+const themeToggle = document.getElementById("theme-toggle");
+const body = document.body;
+
+// Load theme from localStorage
+const savedTheme = localStorage.getItem("theme");
+if (savedTheme === "dark") {
+  body.classList.add("dark");
+  themeToggle.textContent = "☀️ Light Mode";
+}
+
+themeToggle.addEventListener("click", () => {
+  body.classList.toggle("dark");
+
+  if (body.classList.contains("dark")) {
+    localStorage.setItem("theme", "dark");
+    themeToggle.textContent = "☀️ Light Mode";
+  } else {
+    localStorage.setItem("theme", "light");
+    themeToggle.textContent = "🌙 Dark Mode";
+  }
 });

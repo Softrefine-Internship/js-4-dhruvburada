@@ -9,6 +9,7 @@ body {
     font-family: 'Segoe UI', sans-serif;
     background-color: #f5f5f5;
     padding: 20px;
+    position: relative;
 }
 
 .container {
@@ -195,8 +196,8 @@ td button.delete-btn:hover {
 #advanced-filters {
     margin-top: 15px;
     transition: all 0.3s ease;
+    margin-bottom: 29px;
 }
-
 
 
 /* Filter Panel Styling */
@@ -217,6 +218,7 @@ td button.delete-btn:hover {
     border: 1px solid #ccc;
     min-width: 240px;
 }
+
 
 #toggle-filters {
     padding: 10px 15px;
@@ -278,6 +280,14 @@ td button.delete-btn:hover {
     border: 1px solid #ccc;
 }
 
+input[type="date"] {
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: normal;
+    color: inherit;
+}
+
+
 .filter-item.actions {
     display: flex;
     justify-content: space-between;
@@ -310,4 +320,92 @@ td button.delete-btn:hover {
 
 .outline-btn:hover {
     background-color: #e6f0ff;
+}
+
+
+/*
+Dark Mode */
+
+body.dark {
+    background-color: #121212;
+    color: #e0e0e0;
+}
+
+body.dark .container {
+    background-color: #1e1e1e;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
+}
+
+body.dark input,
+body.dark select,
+body.dark textarea {
+    background-color: #2a2a2a;
+    color: #e0e0e0;
+    border: 1px solid #444;
+    outline: none;
+}
+
+body.dark table {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+}
+
+body.dark th {
+    background-color: #2c2c2c;
+}
+
+body.dark td button.delete-btn {
+    background-color: #ff5e5e;
+}
+
+body.dark .outline-btn {
+
+    border-color: #e0e0e0;
+}
+
+body.dark .outline-btn:hover {
+    background-color: #333;
+}
+
+body.dark .primary-btn {
+    background-color: #2979ff;
+}
+
+body.dark .primary-btn:hover {
+    background-color: #1565c0;
+}
+
+body.dark #category-suggestions {
+    background-color: #2a2a2a;
+    color: #e0e0e0;
+    border-color: #555;
+}
+
+body.dark #search-input {
+    border: none;
+}
+
+.theme-toggle {
+    float: right;
+    margin-bottom: 10px;
+}
+
+body.dark .suggestion-item.active {
+    background-color: #767779;
+    color: white;
+    cursor: pointer;
+}
+
+body.dark input[type="date"] {
+    /* Your styles here */
+    color: gray;
+    color-scheme: dark;
+}
+
+body.dark #advanced-filters {
+    background-color: #2a2a2a;
+}
+
+body.dark .filter-item label {
+    color: white;
 }
