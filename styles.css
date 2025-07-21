@@ -1,1 +1,180 @@
-/* write css here */
+/* Base Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f5f5f5;
+    padding: 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form-group input,
+.form-group select {
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.form-item {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+}
+
+button {
+    padding: 10px;
+    font-size: 1rem;
+    background-color: #0077ff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #005ecc;
+}
+
+.total {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    text-align: right;
+    font-weight: bold;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
+}
+
+th,
+td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #f0f0f0;
+}
+
+td button {
+    padding: 5px 10px;
+    background-color: #ff5252;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+td button:hover {
+    background-color: #e53935;
+}
+
+/* Responsive Styling */
+@media (min-width: 600px) {
+    .form-group {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .form-group input,
+    .form-group select {
+        flex: 1;
+
+    }
+
+    .form-group input:last-child,
+    .form-group select:last-child {
+        margin-right: 0;
+    }
+}
+
+
+.category-combobox {
+    position: relative;
+}
+
+#category-input {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+}
+
+#category-suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #ccc;
+    border-top: none;
+    max-height: 150px;
+    overflow-y: auto;
+    list-style: none;
+    z-index: 10;
+}
+
+#category-suggestions li {
+    padding: 10px;
+    cursor: pointer;
+}
+
+#category-suggestions li:hover {
+    background-color: #f0f0f0;
+}
+
+.hidden {
+    display: none;
+}
+
+[class$="-error"] {
+    margin-top: 2px;
+    color: red;
+}
+
+.invalid {
+    border: solid 1px red;
+}
+
+.suggestion-item.active {
+    background-color: #d8eafd;
+    cursor: pointer;
+}
